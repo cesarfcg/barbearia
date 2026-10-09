@@ -1,34 +1,39 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { AuthProvider } from './AuthProvider'
-import { Layout } from './components/Layout'
-import { Publica } from './components/Publica'
-import { AConfirmar } from './pages/admin/AConfirmar'
-import { Agenda } from './pages/admin/Agenda'
-import { Avaliacoes } from './pages/admin/Avaliacoes'
-import { Horarios } from './pages/admin/Horarios'
-import { Negocio } from './pages/admin/Negocio'
-import { EditarRecurso, NovoRecurso } from './pages/admin/Recurso'
-import { Recursos } from './pages/admin/Recursos'
-import { EditarServico, NovoServico } from './pages/admin/Servico'
-import { Servicos } from './pages/admin/Servicos'
-import { Confirmar } from './pages/agendar/Confirmar'
-import { AlterarSenha } from './pages/AlterarSenha'
-import { EscolherHorario } from './pages/agendar/EscolherHorario'
-import { EscolherProfessor } from './pages/agendar/EscolherProfessor'
-import { EscolherServico } from './pages/agendar/EscolherServico'
-import { Enviado } from './pages/agendar/Enviado'
-import { Aula } from './pages/Aula'
-import { Avaliar } from './pages/Avaliar'
-import { Cadastro } from './pages/Cadastro'
-import { Entrada } from './pages/Entrada'
-import { EsqueciSenha } from './pages/EsqueciSenha'
-import { Inicio } from './pages/Inicio'
-import { Login } from './pages/Login'
-import { MinhasAulas } from './pages/MinhasAulas'
-import { NaoEncontrado } from './pages/NaoEncontrado'
-import { Perfil } from './pages/Perfil'
-import { Professor } from './pages/Professor'
-import { Professores } from './pages/Professores'
+import { BrowserRouter, Navigate, Route, Routes, useParams } from "react-router-dom";
+import { AuthProvider } from "./AuthProvider";
+import { Layout } from "./components/Layout";
+import { Publica } from "./components/Publica";
+import { AConfirmar } from "./pages/admin/AConfirmar";
+import { Agenda } from "./pages/admin/Agenda";
+import { Avaliacoes } from "./pages/admin/Avaliacoes";
+import { Horarios } from "./pages/admin/Horarios";
+import { Negocio } from "./pages/admin/Negocio";
+import { EditarRecurso, NovoRecurso } from "./pages/admin/Recurso";
+import { Recursos } from "./pages/admin/Recursos";
+import { EditarServico, NovoServico } from "./pages/admin/Servico";
+import { Servicos } from "./pages/admin/Servicos";
+import { Confirmar } from "./pages/agendar/Confirmar";
+import { AlterarSenha } from "./pages/AlterarSenha";
+import { EscolherHorario } from "./pages/agendar/EscolherHorario";
+import { EscolherBarbeiro } from "./pages/agendar/EscolherBarbeiro";
+import { EscolherServico } from "./pages/agendar/EscolherServico";
+import { Enviado } from "./pages/agendar/Enviado";
+import { Horario } from "./pages/Horario";
+import { Avaliar } from "./pages/Avaliar";
+import { Cadastro } from "./pages/Cadastro";
+import { Entrada } from "./pages/Entrada";
+import { EsqueciSenha } from "./pages/EsqueciSenha";
+import { Inicio } from "./pages/Inicio";
+import { Login } from "./pages/Login";
+import { MeusHorarios } from "./pages/MeusHorarios";
+import { NaoEncontrado } from "./pages/NaoEncontrado";
+import { Perfil } from "./pages/Perfil";
+import { Barbeiro } from "./pages/Barbeiro";
+import { Barbeiros } from "./pages/Barbeiros";
+
+function RedirecionarHorario({ avaliar = false }) {
+  const { id } = useParams();
+  return <Navigate to={`/horarios/${id}${avaliar ? "/avaliar" : ""}`} replace />;
+}
 
 function App() {
   return (
@@ -44,13 +49,16 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/inicio" element={<Inicio />} />
             <Route path="/agendar" element={<EscolherServico />} />
-            <Route path="/agendar/professor" element={<EscolherProfessor />} />
+            <Route path="/agendar/barbeiro" element={<EscolherBarbeiro />} />
             <Route path="/agendar/horario" element={<EscolherHorario />} />
             <Route path="/agendar/confirmar" element={<Confirmar />} />
             <Route path="/agendar/enviado" element={<Enviado />} />
-            <Route path="/aulas" element={<MinhasAulas />} />
-            <Route path="/aulas/:id" element={<Aula />} />
-            <Route path="/aulas/:id/avaliar" element={<Avaliar />} />
+            <Route path="/horarios" element={<MeusHorarios />} />
+            <Route path="/horarios/:id" element={<Horario />} />
+            <Route path="/horarios/:id/avaliar" element={<Avaliar />} />
+            <Route path="/aulas" element={<Navigate to="/horarios" replace />} />
+            <Route path="/aulas/:id" element={<RedirecionarHorario />} />
+            <Route path="/aulas/:id/avaliar" element={<RedirecionarHorario avaliar />} />
             <Route path="/perfil" element={<Perfil />} />
             <Route path="/perfil/senha" element={<AlterarSenha />} />
             <Route path="/admin/agenda" element={<Agenda />} />
@@ -64,14 +72,14 @@ function App() {
             <Route path="/admin/servicos/novo" element={<NovoServico />} />
             <Route path="/admin/servicos/:id" element={<EditarServico />} />
             <Route path="/admin/avaliacoes" element={<Avaliacoes />} />
-            <Route path="/professores" element={<Professores />} />
-            <Route path="/professores/:id" element={<Professor />} />
+            <Route path="/barbeiros" element={<Barbeiros />} />
+            <Route path="/barbeiros/:id" element={<Barbeiro />} />
             <Route path="*" element={<NaoEncontrado />} />
           </Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
-  )
+  );
 }
 
-export default App
+export default App;

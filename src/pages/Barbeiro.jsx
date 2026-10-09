@@ -9,7 +9,7 @@ import { Erro } from '../components/Erro'
 import { Foto } from '../components/Foto'
 import { useApi, usePaginado } from '../hooks/useApi'
 
-export function Professor() {
+export function Barbeiro() {
   const { id } = useParams()
   const { pode } = useAuth()
   const recurso = useApi(`/recursos/${id}/`)
@@ -37,7 +37,7 @@ export function Professor() {
             </div>
             {pode('api.add_agendamento') && (
               <Button as={Link} to={`/agendar?recurso=${id}`}>
-                <i className="bi bi-calendar-plus"></i> Agendar com este professor ou sala
+                <i className="bi bi-calendar-plus"></i> Agendar com este barbeiro
               </Button>
             )}
           </div>

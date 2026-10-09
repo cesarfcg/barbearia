@@ -6,7 +6,7 @@ import { Erro } from '../../components/Erro'
 import { Foto } from '../../components/Foto'
 import { usePaginado } from '../../hooks/useApi'
 
-export function EscolherProfessor() {
+export function EscolherBarbeiro() {
   const [params] = useSearchParams()
   const servico = params.get('servico')
   const recursos = usePaginado(`/recursos/?servicos=${servico}`)
@@ -17,9 +17,9 @@ export function EscolherProfessor() {
   return (
     <>
       <small className="text-secondary">Passo 2 de 4</small>
-      <h2 className="mb-4">Com quem ou onde?</h2>
+      <h2 className="mb-4">Escolha o barbeiro</h2>
       {recursos.itens.length === 0 ? (
-        <Alert variant="info">Nenhum professor ou sala realiza este serviço.</Alert>
+        <Alert variant="info">Nenhum barbeiro realiza este serviço.</Alert>
       ) : (
         <Row xs={1} md={2} lg={3} className="g-4">
           <Col>
@@ -45,7 +45,7 @@ export function EscolherProfessor() {
                     <Button as={Link} to={`/agendar/horario?servico=${servico}&recurso=${recurso.id}`}>
                       Escolher
                     </Button>
-                    <Button as={Link} to={`/professores/${recurso.id}`} variant="link">
+                    <Button as={Link} to={`/barbeiros/${recurso.id}`} variant="link">
                       Ver avaliações
                     </Button>
                   </div>

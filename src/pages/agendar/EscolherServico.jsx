@@ -1,23 +1,23 @@
-import { Alert, Card, Col, Row } from 'react-bootstrap'
-import { Link, useSearchParams } from 'react-router-dom'
-import { Carregando } from '../../components/Carregando'
-import { CarregarMais } from '../../components/CarregarMais'
-import { Erro } from '../../components/Erro'
-import { formatarPreco } from '../../formatos'
-import { usePaginado } from '../../hooks/useApi'
+import { Alert, Card, Col, Row } from "react-bootstrap";
+import { Link, useSearchParams } from "react-router-dom";
+import { Carregando } from "../../components/Carregando";
+import { CarregarMais } from "../../components/CarregarMais";
+import { Erro } from "../../components/Erro";
+import { formatarPreco } from "../../formatos";
+import { usePaginado } from "../../hooks/useApi";
 
 export function EscolherServico() {
-  const [params] = useSearchParams()
-  const recurso = params.get('recurso')
-  const servicos = usePaginado(recurso ? `/servicos/?recursos=${recurso}` : '/servicos/')
+  const [params] = useSearchParams();
+  const recurso = params.get("recurso");
+  const servicos = usePaginado(recurso ? `/servicos/?recursos=${recurso}` : "/servicos/");
 
-  if (servicos.erro) return <Erro erro={servicos.erro} tentarDeNovo={servicos.recarregar} />
+  if (servicos.erro) return <Erro erro={servicos.erro} tentarDeNovo={servicos.recarregar} />;
 
   function proximoPasso(servico) {
     if (recurso) {
-      return `/agendar/horario?servico=${servico.id}&recurso=${recurso}`
+      return `/agendar/horario?servico=${servico.id}&recurso=${recurso}`;
     }
-    return `/agendar/professor?servico=${servico.id}`
+    return `/agendar/barbeiro?servico=${servico.id}`;
   }
 
   return (
@@ -26,14 +26,14 @@ export function EscolherServico() {
       <h2 className="mb-4">Qual serviço?</h2>
       {!servicos.carregando && servicos.itens.length === 0 && <Alert variant="info">Nenhum serviço disponível.</Alert>}
       <Row xs={1} md={2} lg={3} className="g-4">
-        {servicos.itens.map(servico => (
+        {servicos.itens.map((servico) => (
           <Col key={servico.id}>
             <Card as={Link} to={proximoPasso(servico)} className="h-100 text-decoration-none">
               {servico.imagem ? (
                 <Card.Img variant="top" src={servico.imagem} />
               ) : (
                 <div className="text-center bg-body-tertiary py-4">
-                  <i className="bi bi-music-note-list display-4 text-secondary"></i>
+                  <i className="bi bi-scissors display-4 text-secondary"></i>
                 </div>
               )}
               <Card.Body>
@@ -41,7 +41,9 @@ export function EscolherServico() {
                 <Card.Text className="text-secondary">{servico.descricao}</Card.Text>
               </Card.Body>
               <Card.Footer className="d-flex justify-content-between">
-                <span><i className="bi bi-clock"></i> {servico.duracao_min} min</span>
+                <span>
+                  <i className="bi bi-clock"></i> {servico.duracao_min} min
+                </span>
                 <strong>{formatarPreco(servico.preco)}</strong>
               </Card.Footer>
             </Card>
@@ -50,5 +52,5 @@ export function EscolherServico() {
       </Row>
       {servicos.carregando ? <Carregando /> : <CarregarMais lista={servicos} />}
     </>
-  )
+  );
 }

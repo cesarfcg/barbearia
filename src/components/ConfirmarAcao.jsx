@@ -1,13 +1,13 @@
-import { Confirmacao } from './Confirmacao'
+import { Confirmacao } from "./Confirmacao";
 
 const ACOES = {
-  confirmar: { titulo: 'Confirmar aula', mensagem: 'Deseja confirmar esta aula?', variante: 'success' },
-  concluir: { titulo: 'Concluir aula', mensagem: 'Deseja marcar esta aula como concluída?', variante: 'success' },
-  cancelar: { titulo: 'Cancelar aula', mensagem: 'Deseja mesmo cancelar esta aula?', variante: 'danger' },
-}
+  confirmar: { titulo: "Confirmar horário", mensagem: "Deseja confirmar este horário?", variante: "success" },
+  concluir: { titulo: "Concluir atendimento", mensagem: "Deseja marcar este atendimento como concluído?", variante: "success" },
+  cancelar: { titulo: "Cancelar horário", mensagem: "Deseja mesmo cancelar este horário?", variante: "danger" },
+};
 
 export function ConfirmarAcao({ acao, onConfirmar, onFechar }) {
-  const { titulo, mensagem, variante } = ACOES[acao] ?? ACOES.confirmar
+  const { titulo, mensagem, variante } = ACOES[acao] ?? ACOES.confirmar;
 
   return (
     <Confirmacao
@@ -19,5 +19,5 @@ export function ConfirmarAcao({ acao, onConfirmar, onFechar }) {
       onConfirmar={onConfirmar}
       onFechar={onFechar}
     />
-  )
+  );
 }
