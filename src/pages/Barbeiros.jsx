@@ -19,8 +19,8 @@ export function Barbeiros() {
         {recursos.itens.map(recurso => (
           <Grid key={recurso.id} size={{ xs: 12, md: 6, lg: 4 }}>
             <Card variant="outlined" component={Link} to={`/barbeiros/${recurso.id}`} className="text-decoration-none d-flex">
-              <CardContent className="d-flex align-items-center gap-3">
-                <Foto src={recurso.foto} tamanho={64} />
+              <CardContent className="d-flex align-items-center gap-3 p-4">
+                <Foto src={recurso.foto} tamanho={74} />
                 <div>
                   <Typography component="h5" className="card-title">{recurso.nome}</Typography>
                   <Typography component="p" className="card-text text-secondary">{recurso.bio}</Typography>

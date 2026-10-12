@@ -1,4 +1,4 @@
-import { Button, List, Box } from "@mui/material";
+import { Button, Card, CardContent, List, Box, Stack, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { api } from "../api/client";
 import { useAuth } from "../AuthContext";
@@ -38,18 +38,65 @@ export function Inicio() {
 
   return (
     <Box>
-      <h2>Olá, {usuario.nome}!</h2>
-      <h5 className="mt-4">Seu próximo horário</h5>
-      {horario.dados ? (
-        <List disablePadding className="mb-3">
-          <HorarioItem horario={horario.dados} />
-        </List>
-      ) : (
-        <p className="text-secondary">Você não tem horários agendados.</p>
-      )}
-      <Button component={Link} to="/agendar" type="button" variant="contained">
-        <CalendarTodayIcon fontSize="small" sx={{ mr: 0.5 }} /> Agendar
-      </Button>
+      <Card
+        sx={{
+          mb: 4,
+          color: "white",
+          background: "linear-gradient(135deg, #171717 0%, #3b3620 100%)",
+          borderRadius: 3,
+          overflow: "hidden",
+        }}>
+        <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+          <Stack
+            direction={{ xs: "column-reverse", sm: "row" }}
+            justifyContent="space-between"
+            alignItems={{ xs: "flex-start", sm: "center" }}
+            gap={3}>
+            <Box>
+              <Typography variant="overline" sx={{ color: "rgba(255,255,255,.7)", letterSpacing: 1.5 }}>
+                Bem-vindo de volta
+              </Typography>
+              <Typography
+                variant="h3"
+                component="h1"
+                sx={{ fontSize: { xs: "2rem", md: "2.5rem" }, fontWeight: 700, mb: 1 }}>
+                Olá, {usuario.nome}!
+              </Typography>
+              <Typography sx={{ color: "rgba(255,255,255,.8)", maxWidth: 520 }}>
+                {descricao || `Cuide do seu estilo na ${nome}.`}
+              </Typography>
+            </Box>
+          </Stack>
+        </CardContent>
+      </Card>
+
+      <Stack direction={{ xs: "column", md: "row" }} className="mb-3 d-flex justify-content-between align-items-center">
+        <Box>
+          <Typography variant="h5" component="h2">
+            Seu próximo horário
+          </Typography>
+          <Typography>Acompanhe os detalhes do seu agendamento</Typography>
+        </Box>
+        <Button component={Link} to="/agendar" type="button" variant="contained" className="d-flex align-items-center gap-2">
+          <CalendarTodayIcon fontSize="small" />
+          Agendar horário
+        </Button>
+      </Stack>
+
+      <Card variant="outlined" sx={{ mt: 3 }}>
+        {horario.dados ? (
+          <List disablePadding>
+            <HorarioItem horario={horario.dados} />
+          </List>
+        ) : (
+          <CardContent sx={{ py: 4, textAlign: "center" }}>
+            <Typography variant="h6" gutterBottom>
+              Nenhum horário agendado
+            </Typography>
+            <Typography>Que tal reservar um momento para cuidar de você?</Typography>
+          </CardContent>
+        )}
+      </Card>
     </Box>
   );
 }

@@ -71,8 +71,8 @@ export function Perfil() {
               <Form.Group className="mb-3 mt-2" controlId="foto">
                 <Form.Label>Foto</Form.Label>
                 <br />
-                <Button component="label" variant="outlined">
-                  <UploadIcon sx={{ mr: 0.5 }} />
+                <Button component="label" variant="outlined" className="d-flex align-items-center gap-2">
+                  <UploadIcon />
                   Selecionar foto
                   <input type="file" hidden accept="image/*" onChange={(e) => setFoto(e.target.files[0])} />
                 </Button>
@@ -84,15 +84,15 @@ export function Perfil() {
                   Salvar
                 </Button>
                 {usuario.foto && (
-                  <Button type="button" variant="outlined" color="secondary" onClick={() => salvar({ foto: null })}>
+                  <Button type="button" variant="outlined" onClick={() => salvar({ foto: null })}>
                     Remover foto
                   </Button>
                 )}
-                <Button component={Link} to="/perfil/senha" variant="outlined" className="ms-auto">
-                  <KeyIcon fontSize="small" sx={{ mr: 0.5 }} /> Alterar senha
+                <Button component={Link} to="/perfil/senha" variant="outlined" className="ms-auto d-flex align-items-center gap-2">
+                  <KeyIcon fontSize="small" /> Alterar senha
                 </Button>
-                <Button type="button" variant="outlined" color="error" onClick={sair}>
-                  <LogoutIcon fontSize="small" sx={{ mr: 0.5 }} /> Sair
+                <Button type="button" variant="outlined" color="error" onClick={sair} className="d-flex align-items-center gap-2">
+                  <LogoutIcon fontSize="small" /> Sair
                 </Button>
               </div>
             </Form>

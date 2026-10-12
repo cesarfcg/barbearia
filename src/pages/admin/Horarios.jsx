@@ -84,9 +84,10 @@ export function Horarios() {
               <Button
                 size="small"
                 variant="contained"
-                startIcon={<PlusIcon />}
+                className="d-flex align-items-center gap-2"
                 onClick={() => setEditando({ dia_semana: dia, hora_inicio: "", hora_fim: "" })}
                 sx={{ minWidth: 0, whiteSpace: "nowrap" }}>
+                <PlusIcon />
                 Adicionar
               </Button>
             }

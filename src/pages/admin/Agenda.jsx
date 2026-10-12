@@ -29,7 +29,7 @@ export function Agenda() {
   return (
     <>
       <h2 className="mb-4">Agenda do dia</h2>
-      <Grid container>
+      <Grid container spacing={2}>
         <Grid size={{ xs: 12, md: 6 }}>
           <SeletorData data={data} onChange={(valor) => mudar("data", valor)} />
         </Grid>

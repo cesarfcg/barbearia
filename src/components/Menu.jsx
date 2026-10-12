@@ -39,6 +39,7 @@ export function Menu() {
                 aria-haspopup="true"
                 aria-expanded={cadastrosAnchor ? "true" : undefined}
                 onClick={(event) => setCadastrosAnchor(event.currentTarget)}
+                className="d-flex align-items-center gap-2"
                 sx={{
                   textTransform: "none",
                   color: "var(--bs-nav-link-color)",

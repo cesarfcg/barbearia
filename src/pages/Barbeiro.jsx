@@ -37,8 +37,8 @@ export function Barbeiro() {
               ))}
             </div>
             {pode('api.add_agendamento') && (
-              <Button component={Link} to={`/agendar?recurso=${id}`} type="button" variant="contained">
-                <CalendarTodayIcon fontSize="small" sx={{ mr: 0.5 }} /> Agendar com este barbeiro
+              <Button component={Link} to={`/agendar?recurso=${id}`} type="button" variant="contained" className="d-flex align-items-center gap-2">
+                <CalendarTodayIcon fontSize="small" /> Agendar com este barbeiro
               </Button>
             )}
           </div>

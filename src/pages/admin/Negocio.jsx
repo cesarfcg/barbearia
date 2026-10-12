@@ -1,6 +1,6 @@
 import { Alert, Card, CardContent } from "@mui/material";
 import { useState } from "react";
-import { Form, Image } from 'react-bootstrap'
+import { Form, Image } from "react-bootstrap";
 import { Button, TextField } from "@mui/material";
 import UploadIcon from "@mui/icons-material/Upload";
 import { api, mensagemDeErro } from "../../api/client";
@@ -82,15 +82,15 @@ function FormNegocio({ organizacao }) {
             fullWidth
             margin="dense"
           />
-          <Form.Group className="mb-3" controlId="logo">
+          <Form.Group className="mb-3 mt-2" controlId="logo">
             <Form.Label>Logo</Form.Label>
             {logo && (
               <div className="mb-2">
                 <Image src={logo} width={200} thumbnail />
               </div>
             )}
-            <Button component="label" variant="outlined">
-              <UploadIcon sx={{ mr: 0.5 }} />
+            <Button component="label" variant="outlined" className="d-flex align-items-center gap-2">
+              <UploadIcon />
               Selecionar logo
               <input type="file" hidden accept="image/*" onChange={(e) => setArquivo(e.target.files[0])} />
             </Button>

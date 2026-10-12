@@ -80,8 +80,8 @@ function FormRecurso({ recurso }) {
         <div className="d-flex align-items-center mb-4">
           <h2 className="me-auto mb-0">{recurso.id ? "Editar barbeiro" : "Novo barbeiro"}</h2>
           {recurso.id && (
-            <Button component={Link} to={`/admin/recursos/${recurso.id}/horarios`} variant="outlined" className="d-flex align-items-center">
-              <AcessAlarmIcon fontSize="small" sx={{ mr: 0.5 }} /> Horários
+            <Button component={Link} to={`/admin/recursos/${recurso.id}/horarios`} variant="outlined" className="d-flex align-items-center gap-2">
+              <AcessAlarmIcon fontSize="small" /> Horários
             </Button>
           )}
         </div>
@@ -128,7 +128,8 @@ function FormRecurso({ recurso }) {
                 </Button>
               )}
             </div>
-            <Button component="label" variant="outlined" startIcon={<UploadIcon />}>
+            <Button component="label" variant="outlined" className="d-flex align-items-center gap-2">
+              <UploadIcon />
               Selecionar foto
               <input type="file" hidden accept="image/*" onChange={(e) => setArquivo(e.target.files[0])} />
             </Button>

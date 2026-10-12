@@ -12,15 +12,14 @@ export function Enviado() {
   }
 
   return (
-    <Card variant="outlined" className="text-center">
+    <Card variant="outlined">
       <CardContent>
-        <CheckCircleIcon className="text-success display-3" />
         <h2 className="my-3">Agendamento enviado!</h2>
         <List disablePadding className="mb-3 text-start">
           <HorarioItem horario={agendamento} />
         </List>
         <Alert severity="info">O administrador da barbearia vai confirmar o seu horário.</Alert>
-        <div className="d-flex justify-content-center gap-2">
+        <div className="d-flex gap-2">
           <Button component={Link} to={`/horarios/${agendamento.id}`} type="button" variant="contained">
             Ver horário
           </Button>

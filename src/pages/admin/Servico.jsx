@@ -1,6 +1,6 @@
 import {
   Alert,
-  Button as MuiButton,
+  Button,
   Card,
   CardContent,
   Checkbox,
@@ -122,7 +122,7 @@ function FormServico({ servico, recursos }) {
             fullWidth
             margin="dense"
           />
-          <Grid container>
+          <Grid container spacing={2}>
             <Grid size={{ xs: 12, md: 6 }} className="mb-3">
               <TextField
                 label="Duração (min)"
@@ -171,14 +171,15 @@ function FormServico({ servico, recursos }) {
             <Form.Label>Imagem</Form.Label>
             <br />
             {imagem && (
-              <div className="d-flex align-items-center gap-3 mb-2">
+              <div className="d-flex align-items-start gap-3 mb-2 flex-column">
                 <Image src={imagem} width={160} thumbnail />
-                <MuiButton type="button" variant="outlined" color="secondary" size="small" onClick={removerImagem}>
+                <Button type="button" variant="outlined" size="small" onClick={removerImagem}>
                   Remover imagem
-                </MuiButton>
+                </Button>
               </div>
             )}
-            <MuiButton component="label" variant="outlined" startIcon={<UploadIcon />}>
+            <Button component="label" variant="outlined" className="d-flex align-items-center gap-2">
+              <UploadIcon />
               Selecionar imagem
               <input
                 type="file"
@@ -186,7 +187,7 @@ function FormServico({ servico, recursos }) {
                 accept="image/*"
                 onChange={(e) => setArquivo(e.target.files[0])}
               />
-            </MuiButton>
+            </Button>
             {arquivo && <div className="small text-secondary mt-2">{arquivo.name}</div>}
             {erros.imagem && <div className="text-danger small mt-1">{erros.imagem.join(" ")}</div>}
           </Form.Group>
@@ -196,12 +197,12 @@ function FormServico({ servico, recursos }) {
             label="Ativo (inativos não aparecem para os clientes)"
           />
           <div className="d-flex gap-2">
-            <MuiButton type="button" variant="outlined" onClick={() => navigate("/admin/servicos")}>
+            <Button type="button" variant="outlined" onClick={() => navigate("/admin/servicos")}>
               Voltar
-            </MuiButton>
-            <MuiButton type="submit" variant="contained">
+            </Button>
+            <Button type="submit" variant="contained">
               Salvar
-            </MuiButton>
+            </Button>
           </div>
         </Form>
       </CardContent>

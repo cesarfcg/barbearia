@@ -24,8 +24,9 @@ export function Servicos() {
           component={Link}
           to="/admin/servicos/novo"
           variant="contained"
-          sx={{ textTransform: "none", display: "inline-flex", alignItems: "center" }}>
-          <AddIcon fontSize="small" sx={{ mr: 0.5 }} />
+          sx={{ textTransform: "none" }}
+          className="d-flex align-items-center gap-2">
+          <AddIcon fontSize="small" />
           Novo serviço
         </Button>
       </div>

@@ -4,7 +4,7 @@ import { Estrelas } from './Estrelas'
 
 export function Avaliacao({ avaliacao }) {
   return (
-    <ListItem>
+    <ListItem sx={{ flexDirection: "column", alignItems: "stretch" }}>
       <div className="d-flex justify-content-between">
         <Estrelas nota={avaliacao.nota} />
         <small className="text-secondary">{formatarData(avaliacao.inicio)}</small>
