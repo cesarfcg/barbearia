@@ -1,5 +1,7 @@
+import { Alert, Button, Card, CardContent, List, ListItem } from "@mui/material";
+import { TextField } from "@mui/material";
 import { useState } from "react";
-import { Alert, Button, Card, Form, ListGroup } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { api, mensagemDeErro } from "../../api/client";
 import { Carregando } from "../../components/Carregando";
@@ -51,48 +53,48 @@ export function Confirmar() {
     <>
       <small className="text-secondary">Passo 4 de 4</small>
       <h2 className="mb-4">Confirmar agendamento</h2>
-      <Card>
-        <ListGroup variant="flush">
-          <ListGroup.Item>
+      <Card variant="outlined">
+        <List disablePadding>
+          <ListItem divider>
             <strong>Serviço:</strong> {servico.dados.nome}
-          </ListGroup.Item>
-          <ListGroup.Item>
+          </ListItem>
+          <ListItem divider>
             <strong>Barbeiro:</strong> {recurso.dados.nome}
-          </ListGroup.Item>
-          <ListGroup.Item>
+          </ListItem>
+          <ListItem divider>
             <strong>Dia:</strong> {formatarData(inicio)}
-          </ListGroup.Item>
-          <ListGroup.Item>
+          </ListItem>
+          <ListItem divider>
             <strong>Horário:</strong> {formatarHora(inicio)} às {formatarHora(fim)} ({servico.dados.duracao_min} min)
-          </ListGroup.Item>
-          <ListGroup.Item>
+          </ListItem>
+          <ListItem divider>
             <strong>Preço:</strong> {formatarPreco(servico.dados.preco)}
-          </ListGroup.Item>
-        </ListGroup>
-        <Card.Body>
-          {erro && <Alert variant="danger">{erro}</Alert>}
+          </ListItem>
+        </List>
+        <CardContent>
+          {erro && <Alert severity="error">{erro}</Alert>}
           <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="observacoes">
-              <Form.Label>Observações</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={observacoes}
-                onChange={(e) => setObservacoes(e.target.value)}
-                placeholder="Ex.: prefiro o acabamento mais baixo nas laterais"
-              />
-              <Form.Text>Informe qualquer preferência ou observação para o barbeiro.</Form.Text>
-            </Form.Group>
+            <TextField
+              label="Observações"
+              multiline
+              rows={3}
+              value={observacoes}
+              onChange={(e) => setObservacoes(e.target.value)}
+              placeholder="Ex.: prefiro o acabamento mais baixo nas laterais"
+              helperText="Informe qualquer preferência ou observação para o barbeiro."
+              fullWidth
+              margin="dense"
+            />
             <div className="d-flex gap-2">
-              <Button variant="outline-secondary" onClick={() => navigate(-1)}>
+              <Button type="button" variant="outlined" onClick={() => navigate(-1)}>
                 Voltar
               </Button>
-              <Button type="submit" disabled={enviando}>
+              <Button type="submit" variant="contained" disabled={enviando}>
                 Confirmar
               </Button>
             </div>
           </Form>
-        </Card.Body>
+        </CardContent>
       </Card>
     </>
   );

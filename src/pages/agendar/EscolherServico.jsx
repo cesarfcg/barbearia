@@ -1,10 +1,12 @@
-import { Alert, Card, Col, Row } from "react-bootstrap";
+import { Alert, Card, CardActions, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import { Link, useSearchParams } from "react-router-dom";
 import { Carregando } from "../../components/Carregando";
 import { CarregarMais } from "../../components/CarregarMais";
 import { Erro } from "../../components/Erro";
 import { formatarPreco } from "../../formatos";
 import { usePaginado } from "../../hooks/useApi";
+import AcessTimeIcon from "@mui/icons-material/AccessTime";
+import ContentCutIcon from "@mui/icons-material/ContentCut";
 
 export function EscolherServico() {
   const [params] = useSearchParams();
@@ -24,32 +26,32 @@ export function EscolherServico() {
     <>
       <small className="text-secondary">Passo 1 de 4</small>
       <h2 className="mb-4">Qual serviço?</h2>
-      {!servicos.carregando && servicos.itens.length === 0 && <Alert variant="info">Nenhum serviço disponível.</Alert>}
-      <Row xs={1} md={2} lg={3} className="g-4">
+      {!servicos.carregando && servicos.itens.length === 0 && <Alert severity="info">Nenhum serviço disponível.</Alert>}
+      <Grid container spacing={4}>
         {servicos.itens.map((servico) => (
-          <Col key={servico.id}>
-            <Card as={Link} to={proximoPasso(servico)} className="h-100 text-decoration-none">
+          <Grid key={servico.id} size={{ xs: 12, md: 6, lg: 4 }}>
+            <Card variant="outlined" component={Link} to={proximoPasso(servico)} className="h-100 text-decoration-none d-flex flex-column">
               {servico.imagem ? (
-                <Card.Img variant="top" src={servico.imagem} />
+                <CardMedia component="img" src={servico.imagem} />
               ) : (
                 <div className="text-center bg-body-tertiary py-4">
-                  <i className="bi bi-scissors display-4 text-secondary"></i>
+                  <ContentCutIcon fontSize="large" sx={{ mr: 0.5 }} />
                 </div>
               )}
-              <Card.Body>
-                <Card.Title>{servico.nome}</Card.Title>
-                <Card.Text className="text-secondary">{servico.descricao}</Card.Text>
-              </Card.Body>
-              <Card.Footer className="d-flex justify-content-between">
+              <CardContent>
+                <Typography component="h5" className="card-title">{servico.nome}</Typography>
+                <Typography component="p" className="card-text text-secondary">{servico.descricao}</Typography>
+              </CardContent>
+              <CardActions className="d-flex justify-content-between">
                 <span>
-                  <i className="bi bi-clock"></i> {servico.duracao_min} min
+                  <AcessTimeIcon fontSize="small" sx={{ mr: 0.5 }} /> {servico.duracao_min} min
                 </span>
                 <strong>{formatarPreco(servico.preco)}</strong>
-              </Card.Footer>
+              </CardActions>
             </Card>
-          </Col>
+          </Grid>
         ))}
-      </Row>
+      </Grid>
       {servicos.carregando ? <Carregando /> : <CarregarMais lista={servicos} />}
     </>
   );

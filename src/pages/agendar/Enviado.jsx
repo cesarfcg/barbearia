@@ -1,6 +1,7 @@
-import { Alert, Button, Card, ListGroup } from "react-bootstrap";
+import { Alert, Button, Card, CardContent, List } from "@mui/material";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { HorarioItem } from "../../components/HorarioItem";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 export function Enviado() {
   const location = useLocation();
@@ -11,23 +12,23 @@ export function Enviado() {
   }
 
   return (
-    <Card className="text-center">
-      <Card.Body>
-        <i className="bi bi-check-circle-fill text-success display-3"></i>
+    <Card variant="outlined" className="text-center">
+      <CardContent>
+        <CheckCircleIcon className="text-success display-3" />
         <h2 className="my-3">Agendamento enviado!</h2>
-        <ListGroup className="mb-3 text-start">
+        <List disablePadding className="mb-3 text-start">
           <HorarioItem horario={agendamento} />
-        </ListGroup>
-        <Alert variant="info">O administrador da barbearia vai confirmar o seu horário.</Alert>
+        </List>
+        <Alert severity="info">O administrador da barbearia vai confirmar o seu horário.</Alert>
         <div className="d-flex justify-content-center gap-2">
-          <Button as={Link} to={`/horarios/${agendamento.id}`}>
+          <Button component={Link} to={`/horarios/${agendamento.id}`} type="button" variant="contained">
             Ver horário
           </Button>
-          <Button as={Link} to="/inicio" variant="outline-primary">
+          <Button component={Link} to="/inicio" type="button" variant="outlined">
             Início
           </Button>
         </div>
-      </Card.Body>
+      </CardContent>
     </Card>
   );
 }

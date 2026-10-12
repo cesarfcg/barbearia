@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Col, Form, ListGroup, Row } from "react-bootstrap";
+import { Grid, List, MenuItem, Select } from "@mui/material";
 import { buscarTodas } from "../../api/client";
 import { Avaliacao } from "../../components/Avaliacao";
 import { Carregando } from "../../components/Carregando";
@@ -20,36 +20,56 @@ export function Avaliacoes() {
   return (
     <>
       <h2 className="mb-4">Avaliações</h2>
-      <Row className="mb-4 g-2">
-        <Col md={8}>
-          <Form.Select value={recurso} onChange={(e) => setRecurso(e.target.value)}>
-            <option value="">Todos os barbeiros</option>
+      <Grid container spacing={2} className="mb-4">
+        <Grid size={{ xs: 12, md: 8 }}>
+          <Select
+            fullWidth
+            size="small"
+            value={recurso}
+            onChange={(e) => setRecurso(e.target.value)}
+            displayEmpty
+            renderValue={(value) =>
+              value === ""
+                ? "Todos os barbeiros"
+                : (recursos.dados?.find((r) => String(r.id) === String(value))?.nome ?? value)
+            }>
+            <MenuItem value="">Todos os barbeiros</MenuItem>
             {recursos.dados?.map((r) => (
-              <option key={r.id} value={r.id}>
+              <MenuItem key={r.id} value={r.id}>
                 {r.nome}
-              </option>
+              </MenuItem>
             ))}
-          </Form.Select>
-        </Col>
-        <Col md={4}>
-          <Form.Select value={nota} onChange={(e) => setNota(e.target.value)}>
-            <option value="">Todas as notas</option>
+          </Select>
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <Select
+            fullWidth
+            size="small"
+            value={nota}
+            onChange={(e) => setNota(e.target.value)}
+            displayEmpty
+            renderValue={(value) =>
+              value === "" ? "Todas as notas" : `${value} ${value === "1" ? "estrela" : "estrelas"}`
+            }>
+            <MenuItem value="">Todas as notas</MenuItem>
             {[5, 4, 3, 2, 1].map((n) => (
-              <option key={n} value={n}>
+              <MenuItem key={n} value={n}>
                 {n} {n === 1 ? "estrela" : "estrelas"}
-              </option>
+              </MenuItem>
             ))}
-          </Form.Select>
-        </Col>
-      </Row>
+          </Select>
+        </Grid>
+      </Grid>
 
       {avaliacoes.erro && <Erro erro={avaliacoes.erro} tentarDeNovo={avaliacoes.recarregar} />}
-      {!avaliacoes.carregando && !avaliacoes.erro && avaliacoes.itens.length === 0 && <p className="text-secondary">Ainda sem avaliações.</p>}
-      <ListGroup>
+      {!avaliacoes.carregando && !avaliacoes.erro && avaliacoes.itens.length === 0 && (
+        <p className="text-secondary">Ainda sem avaliações.</p>
+      )}
+      <List disablePadding>
         {avaliacoes.itens.map((avaliacao) => (
           <Avaliacao key={avaliacao.id} avaliacao={avaliacao} />
         ))}
-      </ListGroup>
+      </List>
       {avaliacoes.carregando ? <Carregando /> : <CarregarMais lista={avaliacoes} />}
     </>
   );

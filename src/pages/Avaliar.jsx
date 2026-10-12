@@ -1,5 +1,6 @@
+import { Alert, Button, Card, CardContent, Rating, TextField } from "@mui/material";
 import { useState } from "react";
-import { Alert, Button, Card, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { api, mensagemDeErro } from "../api/client";
 import { Carregando } from "../components/Carregando";
@@ -30,30 +31,35 @@ export function Avaliar() {
   }
 
   return (
-    <Card>
-      <Card.Body>
+    <Card variant="outlined">
+      <CardContent>
         <h2>Avaliar atendimento</h2>
         <p className="text-secondary">
           {horario.dados.servico_nome} com {horario.dados.recurso_nome}, {formatarData(horario.dados.inicio)}
         </p>
-        {erro && <Alert variant="danger">{erro}</Alert>}
+        {erro && <Alert severity="error">{erro}</Alert>}
         <Form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            {[1, 2, 3, 4, 5].map((n) => (
-              <Button key={n} variant="link" className="p-1 fs-2 text-warning" onClick={() => setNota(n)}>
-                <i className={n <= nota ? "bi bi-star-fill" : "bi bi-star"}></i>
-              </Button>
-            ))}
-          </div>
-          <Form.Group className="mb-3" controlId="comentario">
-            <Form.Label>Comentário</Form.Label>
-            <Form.Control as="textarea" rows={3} value={comentario} onChange={(e) => setComentario(e.target.value)} />
-          </Form.Group>
-          <Button type="submit" disabled={nota === 0}>
+          <Rating
+            className="mb-3"
+            value={nota}
+            onChange={(_, novoValor) => setNota(novoValor ?? 0)}
+            size="large"
+            aria-label="Nota do atendimento"
+          />
+          <TextField
+            label="Comentário"
+            multiline
+            rows={3}
+            value={comentario}
+            onChange={(e) => setComentario(e.target.value)}
+            fullWidth
+            margin="dense"
+          />
+          <Button type="submit" variant="contained" disabled={nota === 0} className="mt-3">
             Enviar
           </Button>
         </Form>
-      </Card.Body>
+      </CardContent>
     </Card>
   );
 }

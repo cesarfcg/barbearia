@@ -1,5 +1,14 @@
-// Cores da marca da barbearia
-$primary: #0a2f5f;
-$warning: #f89800;
-
 @import "bootstrap/scss/bootstrap";
+
+.MuiAlert-root {
+  margin-bottom: 1rem;
+}
+
+body,
+a,
+button,
+input,
+select,
+textarea {
+  font-family: "Google Sans", sans-serif !important;
+}

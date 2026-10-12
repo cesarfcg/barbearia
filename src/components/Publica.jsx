@@ -1,4 +1,4 @@
-import { Card, Col, Container, Row } from 'react-bootstrap'
+import { Card, CardContent, Container, Grid } from "@mui/material";
 import { Navigate, Outlet } from 'react-router-dom'
 import { useAuth } from '../AuthContext'
 import { Carregando } from './Carregando'
@@ -14,16 +14,16 @@ export function Publica() {
   }
 
   return (
-    <Container className="my-5">
-      <Row className="justify-content-center">
-        <Col md={6} lg={5}>
-          <Card className="shadow-sm">
-            <Card.Body className="p-4">
+    <Container className="min-vh-100 d-flex align-items-center">
+      <Grid container className="w-100" sx={{ justifyContent: "center" }}>
+        <Grid size={{ xs: 12, md: 6, lg: 5 }}>
+          <Card variant="outlined" className="shadow-sm">
+            <CardContent className="p-4">
               <Outlet />
-            </Card.Body>
+            </CardContent>
           </Card>
-        </Col>
-      </Row>
+        </Grid>
+      </Grid>
     </Container>
   )
 }

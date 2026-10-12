@@ -1,4 +1,8 @@
-import { Container, Image, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { useState } from "react";
+import { Button, Divider, IconButton, Menu as MuiMenu, MenuItem } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Container, Image, Nav, Navbar } from "react-bootstrap";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { Foto } from "./Foto";
@@ -6,35 +10,55 @@ import { Foto } from "./Foto";
 export function Menu() {
   const { usuario, pode, inicio, sair } = useAuth();
   const organizacao = usuario.organizacao;
+  const [cadastrosAnchor, setCadastrosAnchor] = useState(null);
+  const [usuarioAnchor, setUsuarioAnchor] = useState(null);
+
+  const fecharMenus = () => {
+    setCadastrosAnchor(null);
+    setUsuarioAnchor(null);
+  };
 
   return (
-    <Navbar expand="lg" bg="primary" data-bs-theme="dark">
+    <Navbar expand="lg" bg="black" data-bs-theme="dark" className="p-3">
       <Container>
-        <Navbar.Brand as={Link} to={inicio}>
-          <Image src="/favicon.png" height={32} className="me-2" />
+        <Navbar.Brand as={Link} to={inicio} className="d-flex align-items-center">
+          <Image src={organizacao.logo || "/favicon.png"} height={40} className="me-2" />
           {organizacao.nome}
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="menu" />
         <Navbar.Collapse id="menu">
           {pode("api.change_organizacao") ? (
-            <Nav className="me-auto">
+            <Nav className="m-auto gap-4">
               <Nav.Link as={NavLink} to="/admin/agenda">
                 Agenda
               </Nav.Link>
               <Nav.Link as={NavLink} to="/admin/confirmar">
                 A confirmar
               </Nav.Link>
-              <NavDropdown title="Cadastros">
-                <NavDropdown.Item as={Link} to="/admin/negocio">
+              <Button
+                aria-haspopup="true"
+                aria-expanded={cadastrosAnchor ? "true" : undefined}
+                onClick={(event) => setCadastrosAnchor(event.currentTarget)}
+                sx={{
+                  textTransform: "none",
+                  color: "var(--bs-nav-link-color)",
+                  minHeight: 40,
+                  padding: "0.5rem 0rem",
+                }}>
+                Cadastros
+                <ExpandMoreIcon />
+              </Button>
+              <MuiMenu anchorEl={cadastrosAnchor} open={Boolean(cadastrosAnchor)} onClose={fecharMenus}>
+                <MenuItem component={Link} to="/admin/negocio" onClick={fecharMenus}>
                   Dados do negócio
-                </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/admin/recursos">
+                </MenuItem>
+                <MenuItem component={Link} to="/admin/recursos" onClick={fecharMenus}>
                   Barbeiros
-                </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/admin/servicos">
+                </MenuItem>
+                <MenuItem component={Link} to="/admin/servicos" onClick={fecharMenus}>
                   Serviços
-                </NavDropdown.Item>
-              </NavDropdown>
+                </MenuItem>
+              </MuiMenu>
               <Nav.Link as={NavLink} to="/admin/avaliacoes">
                 Avaliações
               </Nav.Link>
@@ -58,22 +82,33 @@ export function Menu() {
             </Nav>
           )}
           <Nav>
-            <NavDropdown
-              align="end"
-              title={
-                <>
-                  <Foto src={usuario.foto} tamanho={24} /> {usuario.nome}
-                </>
-              }
-            >
-              <NavDropdown.Item as={Link} to="/perfil">
-                <i className="bi bi-person"></i> Meu perfil
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item onClick={sair}>
-                <i className="bi bi-box-arrow-right"></i> Sair
-              </NavDropdown.Item>
-            </NavDropdown>
+            <IconButton
+              color="inherit"
+              aria-label="Abrir menu do usuário"
+              aria-haspopup="true"
+              aria-expanded={usuarioAnchor ? "true" : undefined}
+              onClick={(event) => setUsuarioAnchor(event.currentTarget)}
+              sx={{ p: 0 }}>
+              <Foto src={usuario.foto} tamanho={40} />
+            </IconButton>
+            <MuiMenu
+              anchorEl={usuarioAnchor}
+              open={Boolean(usuarioAnchor)}
+              onClose={fecharMenus}
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              transformOrigin={{ vertical: "top", horizontal: "right" }}>
+              <MenuItem component={Link} to="/perfil" onClick={fecharMenus}>
+                Meu perfil
+              </MenuItem>
+              <Divider />
+              <MenuItem
+                onClick={() => {
+                  fecharMenus();
+                  sair();
+                }}>
+                <LogoutIcon fontSize="small" sx={{ mr: 0.5 }} /> Sair
+              </MenuItem>
+            </MuiMenu>
           </Nav>
         </Navbar.Collapse>
       </Container>

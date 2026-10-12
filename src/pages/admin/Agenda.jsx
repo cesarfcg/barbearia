@@ -1,4 +1,4 @@
-import { Alert, Col, Form, ListGroup, Row } from "react-bootstrap";
+import { Alert, Grid, List, MenuItem, Select } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 import { buscarTodas } from "../../api/client";
 import { HorarioItem } from "../../components/HorarioItem";
@@ -29,30 +29,41 @@ export function Agenda() {
   return (
     <>
       <h2 className="mb-4">Agenda do dia</h2>
-      <Row>
-        <Col md={6}>
+      <Grid container>
+        <Grid size={{ xs: 12, md: 6 }}>
           <SeletorData data={data} onChange={(valor) => mudar("data", valor)} />
-        </Col>
-        <Col md={6}>
-          <Form.Select className="mb-4" value={recurso} onChange={(e) => mudar("recurso", e.target.value)}>
-            <option value="">Todos os barbeiros</option>
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <Select
+            className="mb-4"
+            fullWidth
+            size="small"
+            value={recurso}
+            onChange={(e) => mudar("recurso", e.target.value)}
+            displayEmpty
+            renderValue={(value) =>
+              value === ""
+                ? "Todos os barbeiros"
+                : (recursos.dados?.find((r) => String(r.id) === String(value))?.nome ?? value)
+            }>
+            <MenuItem value="">Todos os barbeiros</MenuItem>
             {recursos.dados?.map((r) => (
-              <option key={r.id} value={r.id}>
+              <MenuItem key={r.id} value={r.id}>
                 {r.nome}
-              </option>
+              </MenuItem>
             ))}
-          </Form.Select>
-        </Col>
-      </Row>
+          </Select>
+        </Grid>
+      </Grid>
 
       {horarios.erro && <Erro erro={horarios.erro} tentarDeNovo={horarios.recarregar} />}
       {horarios.carregando && <Carregando />}
-      {horarios.dados?.length === 0 && <Alert variant="info">Nenhum horário neste dia.</Alert>}
-      <ListGroup>
+      {horarios.dados?.length === 0 && <Alert severity="info">Nenhum horário neste dia.</Alert>}
+      <List disablePadding>
         {horarios.dados?.map((horario) => (
           <HorarioItem key={horario.id} horario={horario} mostrarCliente />
         ))}
-      </ListGroup>
+      </List>
     </>
   );
 }

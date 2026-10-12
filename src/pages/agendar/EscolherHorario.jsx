@@ -1,4 +1,4 @@
-import { Alert, Button, Card } from 'react-bootstrap'
+import { Alert, Box, Button, Card, CardContent, CardHeader } from "@mui/material";
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Carregando } from '../../components/Carregando'
 import { Erro } from '../../components/Erro'
@@ -41,7 +41,7 @@ export function EscolherHorario() {
       <small className="text-secondary">Passo 3 de 4</small>
       <h2 className="mb-4">Quando?</h2>
 
-      {location.state?.erro && <Alert variant="warning">{location.state.erro}</Alert>}
+      {location.state?.erro && <Alert severity="warning">{location.state.erro}</Alert>}
 
       <SeletorData data={data} onChange={mudarData} min={hoje()} />
 
@@ -49,27 +49,31 @@ export function EscolherHorario() {
       {carregando && <Carregando />}
 
       {dados && comHorarios.length === 0 && (
-        <Alert variant="info" className="d-flex align-items-center">
+        <Alert severity="info" className="d-flex align-items-center">
           Sem horários livres neste dia.
-          <Button variant="outline-primary" size="sm" className="ms-auto" onClick={() => mudarData(somarDias(data, 1))}>
+          <Button type="button" variant="outlined" size="small" className="ms-auto" onClick={() => mudarData(somarDias(data, 1))}>
             Ver o dia seguinte
           </Button>
         </Alert>
       )}
 
       {comHorarios.map(item => (
-        <Card key={item.recurso.id} className="mb-3">
-          <Card.Header className="d-flex align-items-center gap-2">
-            <Foto src={item.recurso.foto} tamanho={32} />
-            {item.recurso.nome}
-          </Card.Header>
-          <Card.Body className="d-flex flex-wrap gap-2">
+        <Card variant="outlined" key={item.recurso.id} className="mb-3">
+          <CardHeader
+            title={
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Foto src={item.recurso.foto} tamanho={40} />
+                <span>{item.recurso.nome}</span>
+              </Box>
+            }
+          />
+          <CardContent className="d-flex flex-wrap gap-2">
             {item.horarios.map(horario => (
-              <Button key={horario} variant="outline-primary" onClick={() => escolher(item.recurso.id, horario)}>
+              <Button type="button" key={horario} variant="outlined" onClick={() => escolher(item.recurso.id, horario)}>
                 {formatarHora(horario)}
               </Button>
             ))}
-          </Card.Body>
+          </CardContent>
         </Card>
       ))}
     </>

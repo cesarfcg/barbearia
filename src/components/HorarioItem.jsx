@@ -1,11 +1,11 @@
-import { ListGroup } from "react-bootstrap";
+import { ListItemButton } from "@mui/material";
 import { Link } from "react-router-dom";
 import { formatarData, formatarHora } from "../formatos";
 import { StatusHorario } from "./StatusHorario";
 
 export function HorarioItem({ horario, mostrarCliente = false }) {
   return (
-    <ListGroup.Item action as={Link} to={`/horarios/${horario.id}`} className="d-flex align-items-center gap-3">
+    <ListItemButton component={Link} to={`/horarios/${horario.id}`} className="d-flex align-items-center gap-3">
       <div className="text-center">
         <div className="fw-bold">{formatarHora(horario.inicio)}</div>
         <small className="text-secondary">{formatarData(horario.inicio)}</small>
@@ -23,6 +23,6 @@ export function HorarioItem({ horario, mostrarCliente = false }) {
         )}
       </div>
       <StatusHorario status={horario.status} />
-    </ListGroup.Item>
+    </ListItemButton>
   );
 }

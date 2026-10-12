@@ -1,47 +1,51 @@
-import { useState } from 'react'
-import { Alert, Button, Card, Col, Form, Row } from 'react-bootstrap'
-import { Link, useLocation } from 'react-router-dom'
-import { api, mensagemDeErro } from '../api/client'
-import { useAuth } from '../AuthContext'
-import { Foto } from '../components/Foto'
+import { Alert, Button, Card, CardContent, Grid, TextField } from "@mui/material";
+import { useState } from "react";
+import { Form } from "react-bootstrap";
+import UploadIcon from "@mui/icons-material/Upload";
+import { Link, useLocation } from "react-router-dom";
+import { api, mensagemDeErro } from "../api/client";
+import { useAuth } from "../AuthContext";
+import { Foto } from "../components/Foto";
+import KeyIcon from "@mui/icons-material/Key";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export function Perfil() {
-  const { usuario, setUsuario, sair } = useAuth()
-  const location = useLocation()
-  const [nome, setNome] = useState(usuario.nome)
-  const [foto, setFoto] = useState(null)
-  const [erro, setErro] = useState(null)
-  const [erros, setErros] = useState({})
-  const [salvo, setSalvo] = useState(false)
+  const { usuario, setUsuario, sair } = useAuth();
+  const location = useLocation();
+  const [nome, setNome] = useState(usuario.nome);
+  const [foto, setFoto] = useState(null);
+  const [erro, setErro] = useState(null);
+  const [erros, setErros] = useState({});
+  const [salvo, setSalvo] = useState(false);
 
   async function salvar(corpo) {
-    setErro(null)
-    setErros({})
-    setSalvo(false)
+    setErro(null);
+    setErros({});
+    setSalvo(false);
     try {
-      setUsuario(await api('/auth/eu/', { method: 'PATCH', body: corpo }))
-      setSalvo(true)
+      setUsuario(await api("/auth/eu/", { method: "PATCH", body: corpo }));
+      setSalvo(true);
     } catch (erro) {
-      setErro(mensagemDeErro(erro))
-      setErros(erro.dados ?? {})
+      setErro(mensagemDeErro(erro));
+      setErros(erro.dados ?? {});
     }
   }
 
   function handleSubmit(e) {
-    e.preventDefault()
-    const formulario = new FormData()
-    formulario.append('nome', nome)
+    e.preventDefault();
+    const formulario = new FormData();
+    formulario.append("nome", nome);
     if (foto) {
-      formulario.append('foto', foto)
+      formulario.append("foto", foto);
     }
-    salvar(formulario)
+    salvar(formulario);
   }
 
   return (
-    <Row className="justify-content-center">
-      <Col md={8} lg={6}>
-        <Card>
-          <Card.Body>
+    <Grid container sx={{ justifyContent: "center" }}>
+      <Grid size={{ xs: 12, md: 8, lg: 6 }}>
+        <Card variant="outlined">
+          <CardContent>
             <div className="text-center mb-4">
               <Foto src={usuario.foto} tamanho={96} />
               <h2 className="mt-2 mb-0">{usuario.nome}</h2>
@@ -49,39 +53,52 @@ export function Perfil() {
               <div className="text-secondary">{usuario.organizacao.nome}</div>
             </div>
 
-            {erro && <Alert variant="danger">{erro}</Alert>}
-            {salvo && <Alert variant="success">Perfil atualizado.</Alert>}
-            {location.state?.mensagem && <Alert variant="success">{location.state.mensagem}</Alert>}
+            {erro && <Alert severity="error">{erro}</Alert>}
+            {salvo && <Alert severity="success">Perfil atualizado.</Alert>}
+            {location.state?.mensagem && <Alert severity="success">{location.state.mensagem}</Alert>}
 
             <Form onSubmit={handleSubmit}>
-              <Form.Group className="mb-3" controlId="nome">
-                <Form.Label>Nome</Form.Label>
-                <Form.Control value={nome} onChange={e => setNome(e.target.value)} isInvalid={!!erros.nome} required />
-                <Form.Control.Feedback type="invalid">{erros.nome?.join(' ')}</Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="foto">
+              <TextField
+                label="Nome"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                error={!!erros.nome}
+                helperText={erros.nome?.join(" ")}
+                required
+                fullWidth
+                margin="dense"
+              />
+              <Form.Group className="mb-3 mt-2" controlId="foto">
                 <Form.Label>Foto</Form.Label>
-                <Form.Control type="file" accept="image/*" onChange={e => setFoto(e.target.files[0])} isInvalid={!!erros.foto} />
-                <Form.Control.Feedback type="invalid">{erros.foto?.join(' ')}</Form.Control.Feedback>
+                <br />
+                <Button component="label" variant="outlined">
+                  <UploadIcon sx={{ mr: 0.5 }} />
+                  Selecionar foto
+                  <input type="file" hidden accept="image/*" onChange={(e) => setFoto(e.target.files[0])} />
+                </Button>
+                {foto && <div className="small text-secondary mt-2">{foto.name}</div>}
+                {erros.foto && <div className="text-danger small mt-1">{erros.foto.join(" ")}</div>}
               </Form.Group>
               <div className="d-flex gap-2">
-                <Button type="submit">Salvar</Button>
+                <Button type="submit" variant="contained">
+                  Salvar
+                </Button>
                 {usuario.foto && (
-                  <Button variant="outline-secondary" onClick={() => salvar({ foto: null })}>
+                  <Button type="button" variant="outlined" color="secondary" onClick={() => salvar({ foto: null })}>
                     Remover foto
                   </Button>
                 )}
-                <Button as={Link} to="/perfil/senha" variant="outline-primary" className="ms-auto">
-                  <i className="bi bi-key"></i> Alterar senha
+                <Button component={Link} to="/perfil/senha" variant="outlined" className="ms-auto">
+                  <KeyIcon fontSize="small" sx={{ mr: 0.5 }} /> Alterar senha
                 </Button>
-                <Button variant="outline-danger" onClick={sair}>
-                  <i className="bi bi-box-arrow-right"></i> Sair
+                <Button type="button" variant="outlined" color="error" onClick={sair}>
+                  <LogoutIcon fontSize="small" sx={{ mr: 0.5 }} /> Sair
                 </Button>
               </div>
             </Form>
-          </Card.Body>
+          </CardContent>
         </Card>
-      </Col>
-    </Row>
-  )
+      </Grid>
+    </Grid>
+  );
 }

@@ -1,11 +1,18 @@
-import { Form } from 'react-bootstrap'
+import { MenuItem, Select } from '@mui/material'
 
 export function FiltroAtivo({ valor, onChange }) {
   return (
-    <Form.Select value={valor} onChange={e => onChange(e.target.value)} className="w-auto">
-      <option value="">Todos</option>
-      <option value="true">Ativos</option>
-      <option value="false">Inativos</option>
-    </Form.Select>
+    <Select
+      value={valor}
+      onChange={e => onChange(e.target.value)}
+      displayEmpty
+      renderValue={value => (value === '' ? 'Todos' : value === 'true' ? 'Ativos' : 'Inativos')}
+      size="small"
+      sx={{ minWidth: 110 }}
+    >
+      <MenuItem value="">Todos</MenuItem>
+      <MenuItem value="true">Ativos</MenuItem>
+      <MenuItem value="false">Inativos</MenuItem>
+    </Select>
   )
 }

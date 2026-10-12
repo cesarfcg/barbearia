@@ -1,4 +1,4 @@
-import { Badge, Button, Card, ListGroup } from 'react-bootstrap'
+import { Button, Card, CardContent, Chip, List } from "@mui/material";
 import { Link, useParams } from 'react-router-dom'
 import { buscarTodas } from '../api/client'
 import { useAuth } from '../AuthContext'
@@ -8,6 +8,7 @@ import { CarregarMais } from '../components/CarregarMais'
 import { Erro } from '../components/Erro'
 import { Foto } from '../components/Foto'
 import { useApi, usePaginado } from '../hooks/useApi'
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 export function Barbeiro() {
   const { id } = useParams()
@@ -24,24 +25,24 @@ export function Barbeiro() {
 
   return (
     <>
-      <Card className="mb-4">
-        <Card.Body className="d-flex gap-4 align-items-center">
+      <Card variant="outlined" className="mb-4">
+        <CardContent className="d-flex gap-4 align-items-center">
           <Foto src={foto} tamanho={120} />
           <div>
             <h2>{nome}</h2>
             <p className="text-secondary">{bio}</p>
             <div className="d-flex flex-wrap gap-1 mb-3">
               {servicos.dados.map(servico => (
-                <Badge key={servico.id} bg="secondary">{servico.nome}</Badge>
+                <Chip key={servico.id} label={servico.nome} color="default" />
               ))}
             </div>
             {pode('api.add_agendamento') && (
-              <Button as={Link} to={`/agendar?recurso=${id}`}>
-                <i className="bi bi-calendar-plus"></i> Agendar com este barbeiro
+              <Button component={Link} to={`/agendar?recurso=${id}`} type="button" variant="contained">
+                <CalendarTodayIcon fontSize="small" sx={{ mr: 0.5 }} /> Agendar com este barbeiro
               </Button>
             )}
           </div>
-        </Card.Body>
+        </CardContent>
       </Card>
 
       <h4>Avaliações</h4>
@@ -49,11 +50,11 @@ export function Barbeiro() {
       {!avaliacoes.carregando && !avaliacoes.erro && avaliacoes.itens.length === 0 && (
         <p className="text-secondary">Ainda sem avaliações.</p>
       )}
-      <ListGroup>
+      <List disablePadding>
         {avaliacoes.itens.map(avaliacao => (
           <Avaliacao key={avaliacao.id} avaliacao={avaliacao} />
         ))}
-      </ListGroup>
+      </List>
       {avaliacoes.carregando ? <Carregando /> : <CarregarMais lista={avaliacoes} />}
     </>
   )

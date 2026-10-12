@@ -1,4 +1,4 @@
-import { Alert, Card, Col, Row } from 'react-bootstrap'
+import { Alert, Card, CardContent, Grid, Typography } from "@mui/material";
 import { Link } from 'react-router-dom'
 import { Carregando } from '../components/Carregando'
 import { CarregarMais } from '../components/CarregarMais'
@@ -14,22 +14,22 @@ export function Barbeiros() {
   return (
     <>
       <h2 className="mb-4">Barbeiros</h2>
-      {!recursos.carregando && recursos.itens.length === 0 && <Alert variant="info">Nenhum barbeiro cadastrado.</Alert>}
-      <Row xs={1} md={2} lg={3} className="g-4">
+      {!recursos.carregando && recursos.itens.length === 0 && <Alert severity="info">Nenhum barbeiro cadastrado.</Alert>}
+      <Grid container spacing={4}>
         {recursos.itens.map(recurso => (
-          <Col key={recurso.id}>
-            <Card as={Link} to={`/barbeiros/${recurso.id}`} className="h-100 text-decoration-none">
-              <Card.Body className="d-flex gap-3">
+          <Grid key={recurso.id} size={{ xs: 12, md: 6, lg: 4 }}>
+            <Card variant="outlined" component={Link} to={`/barbeiros/${recurso.id}`} className="text-decoration-none d-flex">
+              <CardContent className="d-flex align-items-center gap-3">
                 <Foto src={recurso.foto} tamanho={64} />
                 <div>
-                  <Card.Title>{recurso.nome}</Card.Title>
-                  <Card.Text className="text-secondary">{recurso.bio}</Card.Text>
+                  <Typography component="h5" className="card-title">{recurso.nome}</Typography>
+                  <Typography component="p" className="card-text text-secondary">{recurso.bio}</Typography>
                 </div>
-              </Card.Body>
+              </CardContent>
             </Card>
-          </Col>
+          </Grid>
         ))}
-      </Row>
+      </Grid>
       {recursos.carregando ? <Carregando /> : <CarregarMais lista={recursos} />}
     </>
   )

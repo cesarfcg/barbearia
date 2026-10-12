@@ -1,8 +1,8 @@
 import { Confirmacao } from "./Confirmacao";
 
 const ACOES = {
-  confirmar: { titulo: "Confirmar horário", mensagem: "Deseja confirmar este horário?", variante: "success" },
-  concluir: { titulo: "Concluir atendimento", mensagem: "Deseja marcar este atendimento como concluído?", variante: "success" },
+  confirmar: { titulo: "Confirmar horário", mensagem: "Deseja confirmar este horário?", variante: "primary" },
+  concluir: { titulo: "Concluir atendimento", mensagem: "Deseja marcar este atendimento como concluído?", variante: "primary" },
   cancelar: { titulo: "Cancelar horário", mensagem: "Deseja mesmo cancelar este horário?", variante: "danger" },
 };
 

@@ -17,7 +17,7 @@ export function Layout() {
   return (
     <>
       <Menu />
-      <Container className="my-4">
+      <Container className="my-5">
         <Outlet />
       </Container>
     </>

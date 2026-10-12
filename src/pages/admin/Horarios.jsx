@@ -1,40 +1,64 @@
-import { useState } from 'react'
-import { Alert, Button, Card, Form, ListGroup, Modal } from 'react-bootstrap'
-import { Link, useParams } from 'react-router-dom'
-import { api, buscarTodas, mensagemDeErro } from '../../api/client'
-import { Carregando } from '../../components/Carregando'
-import { Confirmacao } from '../../components/Confirmacao'
-import { Erro } from '../../components/Erro'
-import { useApi } from '../../hooks/useApi'
+import {
+  Alert,
+  Box,
+  Button,
+  IconButton,
+  Card,
+  CardHeader,
+  FormControl,
+  InputLabel,
+  List,
+  ListItem,
+  ListItemText,
+  MenuItem,
+  Modal,
+  Select,
+  Typography,
+} from "@mui/material";
+import { useState } from "react";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import dayjs from "dayjs";
+import { Form } from "react-bootstrap";
+import { Link, useParams } from "react-router-dom";
+import { api, buscarTodas, mensagemDeErro } from "../../api/client";
+import { Carregando } from "../../components/Carregando";
+import { Confirmacao } from "../../components/Confirmacao";
+import { Erro } from "../../components/Erro";
+import { useApi } from "../../hooks/useApi";
+import EditSquareIcon from "@mui/icons-material/EditSquare";
+import DeleteIcon from "@mui/icons-material/Delete";
+import PlusIcon from "@mui/icons-material/Add";
 
-const DIAS = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo']
+const DIAS = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"];
 
 export function Horarios() {
-  const { id } = useParams()
-  const recurso = useApi(`/recursos/${id}/`)
-  const horarios = useApi(`/disponibilidades/?recurso=${id}`, buscarTodas)
-  const [editando, setEditando] = useState(null)
-  const [removendo, setRemovendo] = useState(null)
-  const [erro, setErro] = useState(null)
+  const { id } = useParams();
+  const recurso = useApi(`/recursos/${id}/`);
+  const horarios = useApi(`/disponibilidades/?recurso=${id}`, buscarTodas);
+  const [editando, setEditando] = useState(null);
+  const [removendo, setRemovendo] = useState(null);
+  const [erro, setErro] = useState(null);
 
-  if (recurso.erro) return <Erro erro={recurso.erro} tentarDeNovo={recurso.recarregar} />
-  if (horarios.erro) return <Erro erro={horarios.erro} tentarDeNovo={horarios.recarregar} />
-  if (recurso.carregando || horarios.carregando) return <Carregando />
+  if (recurso.erro) return <Erro erro={recurso.erro} tentarDeNovo={recurso.recarregar} />;
+  if (horarios.erro) return <Erro erro={horarios.erro} tentarDeNovo={horarios.recarregar} />;
+  if (recurso.carregando || horarios.carregando) return <Carregando />;
 
   async function remover() {
-    setErro(null)
+    setErro(null);
     try {
-      await api(`/disponibilidades/${removendo}/`, { method: 'DELETE' })
-      horarios.recarregar()
+      await api(`/disponibilidades/${removendo}/`, { method: "DELETE" });
+      horarios.recarregar();
     } catch (erro) {
-      setErro(mensagemDeErro(erro))
+      setErro(mensagemDeErro(erro));
     }
-    setRemovendo(null)
+    setRemovendo(null);
   }
 
   function salvo() {
-    setEditando(null)
-    horarios.recarregar()
+    setEditando(null);
+    horarios.recarregar();
   }
 
   return (
@@ -44,44 +68,55 @@ export function Horarios() {
           <h2 className="mb-0">Horários</h2>
           <span className="text-secondary">{recurso.dados.nome}</span>
         </div>
-        <Button as={Link} to={`/admin/recursos/${id}`} variant="outline-secondary">Voltar</Button>
+        <Button component={Link} to={`/admin/recursos/${id}`} variant="outlined">
+          Voltar
+        </Button>
       </div>
-      {erro && <Alert variant="danger">{erro}</Alert>}
-      {horarios.dados.length === 0 && (
-        <Alert variant="warning">Sem horários: ninguém consegue agendar.</Alert>
-      )}
+      {erro && <Alert severity="error">{erro}</Alert>}
+      {horarios.dados.length === 0 && <Alert severity="warning">Sem horários: ninguém consegue agendar.</Alert>}
 
       {DIAS.map((nome, dia) => (
-        <Card key={dia} className="mb-3">
-          <Card.Header className="d-flex align-items-center">
-            <span className="me-auto">{nome}</span>
-            <Button size="sm" variant="outline-primary" onClick={() => setEditando({ dia_semana: dia, hora_inicio: '', hora_fim: '' })}>
-              <i className="bi bi-plus-lg"></i> Adicionar
-            </Button>
-          </Card.Header>
-          <ListGroup variant="flush">
+        <Card variant="outlined" key={dia} className="mb-3">
+          <CardHeader
+            sx={{ "& .MuiCardHeader-action": { alignSelf: "center", marginTop: 0, marginRight: 0 } }}
+            title={nome}
+            action={
+              <Button
+                size="small"
+                variant="contained"
+                startIcon={<PlusIcon />}
+                onClick={() => setEditando({ dia_semana: dia, hora_inicio: "", hora_fim: "" })}
+                sx={{ minWidth: 0, whiteSpace: "nowrap" }}>
+                Adicionar
+              </Button>
+            }
+          />
+
+          <List disablePadding>
             {horarios.dados
-              .filter(h => h.dia_semana === dia)
-              .map(h => (
-                <ListGroup.Item key={h.id} className="d-flex align-items-center gap-2">
-                  <span className="me-auto">
-                    {h.hora_inicio.slice(0, 5)} às {h.hora_fim.slice(0, 5)}
-                  </span>
-                  <Button size="sm" variant="outline-secondary" onClick={() => setEditando(h)}>
-                    <i className="bi bi-pencil"></i>
-                  </Button>
-                  <Button size="sm" variant="outline-danger" onClick={() => setRemovendo(h.id)}>
-                    <i className="bi bi-trash"></i>
-                  </Button>
-                </ListGroup.Item>
+              .filter((h) => h.dia_semana === dia)
+              .map((h) => (
+                <ListItem
+                  key={h.id}
+                  divider
+                  secondaryAction={
+                    <>
+                      <IconButton onClick={() => setEditando(h)} aria-label="Editar horário">
+                        <EditSquareIcon />
+                      </IconButton>
+                      <IconButton color="error" onClick={() => setRemovendo(h.id)} aria-label="Remover horário">
+                        <DeleteIcon />
+                      </IconButton>
+                    </>
+                  }>
+                  <ListItemText primary={`${h.hora_inicio.slice(0, 5)} às ${h.hora_fim.slice(0, 5)}`} />
+                </ListItem>
               ))}
-          </ListGroup>
+          </List>
         </Card>
       ))}
 
-      {editando && (
-        <FormHorario recurso={id} horario={editando} onSalvo={salvo} onFechar={() => setEditando(null)} />
-      )}
+      {editando && <FormHorario recurso={id} horario={editando} onSalvo={salvo} onFechar={() => setEditando(null)} />}
       <Confirmacao
         show={removendo !== null}
         titulo="Remover horário"
@@ -92,66 +127,111 @@ export function Horarios() {
         onFechar={() => setRemovendo(null)}
       />
     </>
-  )
+  );
 }
 
 function FormHorario({ recurso, horario, onSalvo, onFechar }) {
-  const [dia, setDia] = useState(horario.dia_semana)
-  const [inicio, setInicio] = useState(horario.hora_inicio.slice(0, 5))
-  const [fim, setFim] = useState(horario.hora_fim.slice(0, 5))
-  const [erro, setErro] = useState(null)
-  const [erros, setErros] = useState({})
+  const [dia, setDia] = useState(horario.dia_semana);
+  const [inicio, setInicio] = useState(horario.hora_inicio.slice(0, 5));
+  const [fim, setFim] = useState(horario.hora_fim.slice(0, 5));
+  const [erro, setErro] = useState(null);
+  const [erros, setErros] = useState({});
+  const inicioSelecionado = dayjs(`2000-01-01T${inicio}`);
+  const fimSelecionado = dayjs(`2000-01-01T${fim}`);
 
   async function handleSubmit(e) {
-    e.preventDefault()
-    setErro(null)
-    setErros({})
-    const corpo = { recurso, dia_semana: dia, hora_inicio: inicio, hora_fim: fim }
+    e.preventDefault();
+    setErro(null);
+    setErros({});
+    const corpo = { recurso, dia_semana: dia, hora_inicio: inicio, hora_fim: fim };
     try {
       if (horario.id) {
-        await api(`/disponibilidades/${horario.id}/`, { method: 'PATCH', body: corpo })
+        await api(`/disponibilidades/${horario.id}/`, { method: "PATCH", body: corpo });
       } else {
-        await api('/disponibilidades/', { method: 'POST', body: corpo })
+        await api("/disponibilidades/", { method: "POST", body: corpo });
       }
-      onSalvo()
+      onSalvo();
     } catch (erro) {
-      setErro(mensagemDeErro(erro))
-      setErros(erro.dados ?? {})
+      setErro(mensagemDeErro(erro));
+      setErros(erro.dados ?? {});
     }
   }
 
   return (
-    <Modal show onHide={onFechar} centered>
-      <Form onSubmit={handleSubmit}>
-        <Modal.Header closeButton>
-          <Modal.Title>{horario.id ? 'Editar horário' : 'Novo horário'}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {erro && <Alert variant="danger">{erro}</Alert>}
-          <Form.Group className="mb-3" controlId="dia">
-            <Form.Label>Dia da semana</Form.Label>
-            <Form.Select value={dia} onChange={e => setDia(Number(e.target.value))}>
-              {DIAS.map((nome, i) => (
-                <option key={i} value={i}>{nome}</option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="inicio">
-            <Form.Label>Início</Form.Label>
-            <Form.Control type="time" value={inicio} onChange={e => setInicio(e.target.value)} isInvalid={!!erros.hora_inicio} required />
-            <Form.Control.Feedback type="invalid">{erros.hora_inicio?.join(' ')}</Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group controlId="fim">
-            <Form.Label>Fim</Form.Label>
-            <Form.Control type="time" value={fim} onChange={e => setFim(e.target.value)} isInvalid={!!erros.hora_fim} required />
-            <Form.Control.Feedback type="invalid">{erros.hora_fim?.join(' ')}</Form.Control.Feedback>
-          </Form.Group>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="outline-secondary" onClick={onFechar}>Voltar</Button>
-          <Button type="submit">Salvar</Button>
-        </Modal.Footer>
-      </Form>
+    <Modal open onClose={onFechar} aria-labelledby="horario-modal-title">
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: { xs: "calc(100% - 32px)", sm: 480 },
+          maxHeight: "90vh",
+          overflowY: "auto",
+          bgcolor: "background.paper",
+          borderRadius: 1,
+          boxShadow: 24,
+          p: 3,
+        }}>
+        <Typography id="horario-modal-title" variant="h6" component="h2" sx={{ mb: 2 }}>
+          {horario.id ? "Editar horário" : "Novo horário"}
+        </Typography>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Form onSubmit={handleSubmit}>
+            {erro && <Alert severity="error">{erro}</Alert>}
+            <FormControl fullWidth margin="dense">
+              <InputLabel id="dia-label">Dia da semana</InputLabel>
+              <Select
+                labelId="dia-label"
+                label="Dia da semana"
+                value={dia}
+                onChange={(e) => setDia(Number(e.target.value))}>
+                {DIAS.map((nome, i) => (
+                  <MenuItem key={i} value={i}>
+                    {nome}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TimePicker
+              label="Início"
+              value={inicioSelecionado}
+              onChange={(valor) => valor && setInicio(valor.format("HH:mm"))}
+              slotProps={{
+                textField: {
+                  error: !!erros.hora_inicio,
+                  helperText: erros.hora_inicio?.join(" "),
+                  required: true,
+                  fullWidth: true,
+                  margin: "dense",
+                },
+              }}
+            />
+            <TimePicker
+              label="Fim"
+              value={fimSelecionado}
+              onChange={(valor) => valor && setFim(valor.format("HH:mm"))}
+              slotProps={{
+                textField: {
+                  error: !!erros.hora_fim,
+                  helperText: erros.hora_fim?.join(" "),
+                  required: true,
+                  fullWidth: true,
+                  margin: "dense",
+                },
+              }}
+            />
+            <div className="d-flex justify-content-end gap-2 mt-3">
+              <Button type="button" variant="outlined" onClick={onFechar}>
+                Voltar
+              </Button>
+              <Button type="submit" variant="contained">
+                Salvar
+              </Button>
+            </div>
+          </Form>
+        </LocalizationProvider>
+      </Box>
     </Modal>
-  )
+  );
 }

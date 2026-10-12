@@ -1,5 +1,17 @@
+import {
+  Alert,
+  Button as MuiButton,
+  Card,
+  CardContent,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Switch,
+  TextField,
+} from "@mui/material";
 import { useState } from "react";
-import { Alert, Button, Card, Col, Form, Image, Row } from "react-bootstrap";
+import { Form, Image } from "react-bootstrap";
+import UploadIcon from "@mui/icons-material/Upload";
 import { useNavigate, useParams } from "react-router-dom";
 import { api, buscarTodas, mensagemDeErro } from "../../api/client";
 import { Carregando } from "../../components/Carregando";
@@ -84,76 +96,115 @@ function FormServico({ servico, recursos }) {
   }
 
   return (
-    <Card>
-      <Card.Body>
+    <Card variant="outlined">
+      <CardContent>
         <h2 className="mb-4">{servico.id ? "Editar serviço" : "Novo serviço"}</h2>
-        {erro && <Alert variant="danger">{erro}</Alert>}
+        {erro && <Alert severity="error">{erro}</Alert>}
         <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="nome">
-            <Form.Label>Nome</Form.Label>
-            <Form.Control value={nome} onChange={(e) => setNome(e.target.value)} isInvalid={!!erros.nome} required />
-            <Form.Control.Feedback type="invalid">{erros.nome?.join(" ")}</Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="descricao">
-            <Form.Label>Descrição</Form.Label>
-            <Form.Control as="textarea" rows={2} value={descricao} onChange={(e) => setDescricao(e.target.value)} isInvalid={!!erros.descricao} />
-            <Form.Control.Feedback type="invalid">{erros.descricao?.join(" ")}</Form.Control.Feedback>
-          </Form.Group>
-          <Row>
-            <Form.Group as={Col} className="mb-3" controlId="duracao">
-              <Form.Label>Duração (min)</Form.Label>
-              <Form.Control type="number" value={duracao} onChange={(e) => setDuracao(e.target.value)} isInvalid={!!erros.duracao_min} />
-              <Form.Control.Feedback type="invalid">{erros.duracao_min?.join(" ")}</Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} className="mb-3" controlId="preco">
-              <Form.Label>Preço (R$)</Form.Label>
-              <Form.Control type="number" step="0.01" value={preco} onChange={(e) => setPreco(e.target.value)} isInvalid={!!erros.preco} />
-              <Form.Control.Feedback type="invalid">{erros.preco?.join(" ")}</Form.Control.Feedback>
-            </Form.Group>
-          </Row>
+          <TextField
+            label="Nome"
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+            error={!!erros.nome}
+            helperText={erros.nome?.join(" ")}
+            required
+            fullWidth
+            margin="dense"
+          />
+          <TextField
+            label="Descrição"
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
+            error={!!erros.descricao}
+            helperText={erros.descricao?.join(" ")}
+            multiline
+            rows={2}
+            fullWidth
+            margin="dense"
+          />
+          <Grid container>
+            <Grid size={{ xs: 12, md: 6 }} className="mb-3">
+              <TextField
+                label="Duração (min)"
+                type="number"
+                value={duracao}
+                onChange={(e) => setDuracao(e.target.value)}
+                error={!!erros.duracao_min}
+                helperText={erros.duracao_min?.join(" ")}
+                fullWidth
+                margin="dense"
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }} className="mb-3">
+              <TextField
+                label="Preço (R$)"
+                type="number"
+                value={preco}
+                onChange={(e) => setPreco(e.target.value)}
+                error={!!erros.preco}
+                helperText={erros.preco?.join(" ")}
+                inputProps={{ step: "0.01" }}
+                fullWidth
+                margin="dense"
+              />
+            </Grid>
+          </Grid>
           <Form.Group className="mb-3">
             <Form.Label>Barbeiros que oferecem</Form.Label>
+            <br />
             {recursos.map((recurso) => (
-              <Form.Check
+              <FormControlLabel
                 key={recurso.id}
-                id={`recurso-${recurso.id}`}
+                control={
+                  <Checkbox
+                    id={`recurso-${recurso.id}`}
+                    checked={escolhidos.includes(recurso.id)}
+                    onChange={(e) => marcar(recurso.id, e.target.checked)}
+                  />
+                }
                 label={recurso.ativo ? recurso.nome : `${recurso.nome} (inativo)`}
-                checked={escolhidos.includes(recurso.id)}
-                onChange={(e) => marcar(recurso.id, e.target.checked)}
-                isInvalid={!!erros.recursos}
               />
             ))}
             {erros.recursos && <div className="text-danger small">{erros.recursos.join(" ")}</div>}
           </Form.Group>
           <Form.Group className="mb-3" controlId="imagem">
             <Form.Label>Imagem</Form.Label>
+            <br />
             {imagem && (
               <div className="d-flex align-items-center gap-3 mb-2">
                 <Image src={imagem} width={160} thumbnail />
-                <Button variant="outline-secondary" size="sm" onClick={removerImagem}>
+                <MuiButton type="button" variant="outlined" color="secondary" size="small" onClick={removerImagem}>
                   Remover imagem
-                </Button>
+                </MuiButton>
               </div>
             )}
-            <Form.Control type="file" accept="image/*" onChange={(e) => setArquivo(e.target.files[0])} isInvalid={!!erros.imagem} />
-            <Form.Control.Feedback type="invalid">{erros.imagem?.join(" ")}</Form.Control.Feedback>
+            <MuiButton component="label" variant="outlined" startIcon={<UploadIcon />}>
+              Selecionar imagem
+              <input
+                type="file"
+                hidden
+                accept="image/*"
+                onChange={(e) => setArquivo(e.target.files[0])}
+              />
+            </MuiButton>
+            {arquivo && <div className="small text-secondary mt-2">{arquivo.name}</div>}
+            {erros.imagem && <div className="text-danger small mt-1">{erros.imagem.join(" ")}</div>}
           </Form.Group>
-          <Form.Check
-            type="switch"
-            id="ativo"
+          <FormControlLabel
             className="mb-3"
+            control={<Switch id="ativo" checked={ativo} onChange={(e) => setAtivo(e.target.checked)} />}
             label="Ativo (inativos não aparecem para os clientes)"
-            checked={ativo}
-            onChange={(e) => setAtivo(e.target.checked)}
           />
           <div className="d-flex gap-2">
-            <Button variant="outline-secondary" onClick={() => navigate("/admin/servicos")}>
+            <MuiButton type="button" variant="outlined" onClick={() => navigate("/admin/servicos")}>
               Voltar
-            </Button>
-            <Button type="submit">Salvar</Button>
+            </MuiButton>
+            <MuiButton type="submit" variant="contained">
+              Salvar
+            </MuiButton>
           </div>
         </Form>
-      </Card.Body>
+      </CardContent>
     </Card>
   );
 }

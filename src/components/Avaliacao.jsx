@@ -1,10 +1,10 @@
-import { ListGroup } from 'react-bootstrap'
+import { ListItem } from "@mui/material";
 import { formatarData } from '../formatos'
 import { Estrelas } from './Estrelas'
 
 export function Avaliacao({ avaliacao }) {
   return (
-    <ListGroup.Item>
+    <ListItem>
       <div className="d-flex justify-content-between">
         <Estrelas nota={avaliacao.nota} />
         <small className="text-secondary">{formatarData(avaliacao.inicio)}</small>
@@ -13,6 +13,6 @@ export function Avaliacao({ avaliacao }) {
       <small className="text-secondary">
         {avaliacao.cliente_nome} · {avaliacao.servico_nome} · {avaliacao.recurso_nome}
       </small>
-    </ListGroup.Item>
+    </ListItem>
   )
 }

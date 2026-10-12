@@ -1,5 +1,5 @@
+import { Alert, Button, Card, CardContent, CardHeader, List, ListItem } from "@mui/material";
 import { useState } from "react";
-import { Alert, Button, Card, ListGroup } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { api, mensagemDeErro } from "../api/client";
 import { useAuth } from "../AuthContext";
@@ -41,66 +41,72 @@ export function Horario() {
   }
 
   return (
-    <Card>
-      <Card.Header className="d-flex justify-content-between align-items-center">
-        <h4 className="mb-0">{horario.servico_nome}</h4>
-        <StatusHorario status={horario.status} />
-      </Card.Header>
-      <ListGroup variant="flush">
-        <ListGroup.Item>
+    <Card variant="outlined">
+      <CardHeader
+        className="d-flex justify-content-between align-items-center"
+        title={<h4 className="mb-0">{horario.servico_nome}</h4>}
+        action={<StatusHorario status={horario.status} />}
+      />
+      <List disablePadding>
+        <ListItem>
           <strong>Barbeiro:</strong> {horario.recurso_nome}
-        </ListGroup.Item>
+        </ListItem>
         {pode("api.view_agendamento") && (
-          <ListGroup.Item>
+          <ListItem>
             <strong>Cliente:</strong> {horario.cliente_nome}
-          </ListGroup.Item>
+          </ListItem>
         )}
-        <ListGroup.Item>
+        <ListItem>
           <strong>Dia:</strong> {formatarData(horario.inicio)}
-        </ListGroup.Item>
-        <ListGroup.Item>
+        </ListItem>
+        <ListItem>
           <strong>Horário:</strong> {formatarHora(horario.inicio)} às {formatarHora(horario.fim)} ({duracao} min)
-        </ListGroup.Item>
+        </ListItem>
         {horario.observacoes && (
-          <ListGroup.Item>
+          <ListItem>
             <strong>Observações:</strong> {horario.observacoes}
-          </ListGroup.Item>
+          </ListItem>
         )}
         {horario.nota && (
-          <ListGroup.Item>
+          <ListItem>
             <strong>Avaliação:</strong> <Estrelas nota={horario.nota} />
             {horario.comentario && <p className="mb-0 mt-1">{horario.comentario}</p>}
-          </ListGroup.Item>
+          </ListItem>
         )}
-      </ListGroup>
-      <Card.Body>
-        {erroAcao && <Alert variant="danger">{erroAcao}</Alert>}
+      </List>
+      <CardContent>
+        {erroAcao && <Alert severity="error">{erroAcao}</Alert>}
         <div className="d-flex gap-2">
-          <Button variant="outline-secondary" onClick={() => navigate(-1)}>
+          <Button type="button" variant="outlined" onClick={() => navigate(-1)}>
             Voltar
           </Button>
           {pode("api.avaliar_agendamento") && horario.status === "concluido" && !horario.nota && (
-            <Button as={Link} to={`/horarios/${id}/avaliar`}>
+            <Button component={Link} to={`/horarios/${id}/avaliar`} type="button" variant="contained">
               <i className="bi bi-star"></i> Avaliar
             </Button>
           )}
           {pode("api.confirmar_agendamento") && horario.status === "solicitado" && (
-            <Button variant="success" onClick={() => setAcao("confirmar")}>
-              <i className="bi bi-check-lg"></i> Confirmar
+            <Button type="button" variant="contained" onClick={() => setAcao("confirmar")}>
+              Confirmar
             </Button>
           )}
           {pode("api.concluir_agendamento") && horario.status === "confirmado" && (
-            <Button variant="success" onClick={() => setAcao("concluir")}>
-              <i className="bi bi-check2-all"></i> Concluir
+            <Button type="button" variant="contained" onClick={() => setAcao("concluir")}>
+              Concluir
             </Button>
           )}
           {pode("api.cancelar_agendamento") && ativo && (
-            <Button variant="outline-danger" className="ms-auto" onClick={() => setAcao("cancelar")}>
+            <Button
+              type="button"
+              variant="outlined"
+              color="error"
+              className="ms-auto"
+              onClick={() => setAcao("cancelar")}>
               Cancelar
             </Button>
           )}
         </div>
-      </Card.Body>
+      </CardContent>
       <ConfirmarAcao acao={acao} onConfirmar={confirmarAcao} onFechar={() => setAcao(null)} />
     </Card>
   );

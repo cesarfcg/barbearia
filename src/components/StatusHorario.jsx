@@ -1,4 +1,4 @@
-import { Badge } from "react-bootstrap";
+import { Chip } from "@mui/material";
 
 const STATUS = {
   solicitado: { cor: "warning", texto: "Solicitado" },
@@ -10,8 +10,6 @@ const STATUS = {
 export function StatusHorario({ status }) {
   const { cor, texto } = STATUS[status];
   return (
-    <Badge bg={cor} text={cor === "warning" ? "dark" : undefined}>
-      {texto}
-    </Badge>
+    <Chip label={texto} color={cor === "secondary" ? "default" : cor} />
   );
 }

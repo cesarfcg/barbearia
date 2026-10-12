@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { Alert } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import { Button, TextField, Box } from '@mui/material'
+import { Alert, Button, TextField, Box, IconButton, InputAdornment } from '@mui/material'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { cadastrar, mensagemDeErro } from '../api/client'
 import { useAuth } from '../AuthContext'
 
@@ -11,6 +11,8 @@ export function Cadastro() {
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
   const [confirmarSenha, setConfirmarSenha] = useState('')
+  const [mostrarSenha, setMostrarSenha] = useState(false)
+  const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false)
   const [erro, setErro] = useState(null)
   const [erros, setErros] = useState({})
   const [enviando, setEnviando] = useState(false)
@@ -37,7 +39,7 @@ export function Cadastro() {
   return (
     <>
       <h2 className="mb-4">Criar conta</h2>
-      {erro && <Alert variant="danger">{erro}</Alert>}
+      {erro && <Alert severity="error">{erro}</Alert>}
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         <TextField
           label="Nome"
@@ -61,23 +63,51 @@ export function Cadastro() {
         />
         <TextField
           label="Senha"
-          type="password"
+          type={mostrarSenha ? 'text' : 'password'}
           value={senha}
           onChange={e => setSenha(e.target.value)}
           error={!!erros.senha}
           helperText={erros.senha?.join(' ')}
           required
           fullWidth
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
+                    onClick={() => setMostrarSenha(!mostrarSenha)}
+                    edge="end">
+                    {mostrarSenha ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
         />
         <TextField
           label="Confirmar senha"
-          type="password"
+          type={mostrarConfirmacao ? 'text' : 'password'}
           value={confirmarSenha}
           onChange={e => setConfirmarSenha(e.target.value)}
           error={senha !== confirmarSenha && confirmarSenha !== ''}
           helperText={senha !== confirmarSenha && confirmarSenha !== '' ? 'As senhas não conferem.' : ''}
           required
           fullWidth
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label={mostrarConfirmacao ? 'Ocultar confirmação de senha' : 'Mostrar confirmação de senha'}
+                    onClick={() => setMostrarConfirmacao(!mostrarConfirmacao)}
+                    edge="end">
+                    {mostrarConfirmacao ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
         />
         <Button type="submit" variant="contained" fullWidth disabled={enviando} sx={{ py: 1.5 }}>
           Criar conta

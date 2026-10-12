@@ -1,4 +1,4 @@
-import { ListGroup } from "react-bootstrap";
+import { List } from "@mui/material";
 import { usePaginado } from "../hooks/useApi";
 import { HorarioItem } from "./HorarioItem";
 import { Carregando } from "./Carregando";
@@ -13,11 +13,11 @@ export function ListaHorarios({ caminho, vazio = "Nenhum horário aqui.", mostra
   return (
     <>
       {!horarios.carregando && horarios.itens.length === 0 && <p className="text-secondary">{vazio}</p>}
-      <ListGroup>
+      <List disablePadding>
         {horarios.itens.map((horario) => (
           <HorarioItem key={horario.id} horario={horario} mostrarCliente={mostrarCliente} />
         ))}
-      </ListGroup>
+      </List>
       {horarios.carregando ? <Carregando /> : <CarregarMais lista={horarios} />}
     </>
   );
