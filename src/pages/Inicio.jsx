@@ -45,26 +45,15 @@ export function Inicio() {
           background: "linear-gradient(135deg, #171717 0%, #3b3620 100%)",
           borderRadius: 3,
           overflow: "hidden",
-        }}>
+        }}
+      >
         <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-          <Stack
-            direction={{ xs: "column-reverse", sm: "row" }}
-            justifyContent="space-between"
-            alignItems={{ xs: "flex-start", sm: "center" }}
-            gap={3}>
+          <Stack direction={{ xs: "column-reverse", sm: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", sm: "center" }} gap={3}>
             <Box>
-              <Typography variant="overline" sx={{ color: "rgba(255,255,255,.7)", letterSpacing: 1.5 }}>
-                Bem-vindo de volta
-              </Typography>
-              <Typography
-                variant="h3"
-                component="h1"
-                sx={{ fontSize: { xs: "2rem", md: "2.5rem" }, fontWeight: 700, mb: 1 }}>
+              <Typography variant="h3" component="h1" sx={{ fontSize: { xs: "2rem", md: "2.5rem" }, fontWeight: 700, mb: 1 }}>
                 Olá, {usuario.nome}!
               </Typography>
-              <Typography sx={{ color: "rgba(255,255,255,.8)", maxWidth: 520 }}>
-                {descricao || `Cuide do seu estilo na ${nome}.`}
-              </Typography>
+              <Typography sx={{ color: "rgba(255,255,255,.8)", maxWidth: 520 }}>{descricao || `Cuide do seu estilo na ${nome}.`}</Typography>
             </Box>
           </Stack>
         </CardContent>
