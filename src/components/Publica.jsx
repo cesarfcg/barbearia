@@ -1,16 +1,25 @@
 import { Card, CardContent, Container, Grid } from "@mui/material";
-import { Navigate, Outlet } from 'react-router-dom'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../AuthContext'
 import { Carregando } from './Carregando'
 
 export function Publica() {
   const { usuario, carregando, inicio } = useAuth()
+  const { pathname } = useLocation()
 
   if (carregando) {
     return <Carregando />
   }
   if (usuario) {
     return <Navigate to={inicio} />
+  }
+
+  if (pathname === '/login' || pathname === '/cadastro') {
+    return (
+      <Container maxWidth={false} disableGutters sx={{ minHeight: '100vh' }}>
+        <Outlet />
+      </Container>
+    )
   }
 
   return (
