@@ -1,15 +1,58 @@
-# Projeto React - POS 2026
+# Barbearia
 
-Nesse projeto vocês deverão criar clientes web com React (JS) para a API de Agendamentos da disciplina.
+Sistema web para agendamento de serviços de barbearia, desenvolvido com React e integrado a uma API REST.
 
-## Instruções
+## Tecnologias
 
-- Criem um fork desse repositório (um por grupo). No momento da criação do fork mudem o nome do repositório para o nome do cliente de vocês. Lembrem-se de mudar também o nome no `package.json`.
-- Na pasta `docs/` estão as especificações para cada projeto, siga o destinado ao seu grupo.
-- No GSA foi enviada a lista dos grupos com usuários admin e senhas. Recomendo que mudem as senhas assim que tiverem acesso.
-- Todos os participantes devem ter commits no repositóro.
-- Substituam esse `README.md` com informações do seu projeto.
-- Usem o projeto da [Escola de Música](https://pos-escola-de-musica-web.vercel.app/) como referência [GitHub](https://github.com/dvcirilo-ifrn/pos-escola-de-musica-web)
-- O projeto deve ser hospedado no [Vercel](https://vercel.com/).
-- Na data da entrega o projeto deverá ser demonstrado diretamente do Vercel e serão feitas perguntas referentes à implementação.
-- *Data de entrega*: 16/10/2026
+- React
+- Vite
+- React Bootstrap
+- React Router
+- API REST
+
+## Funcionalidades
+
+- Cadastro e autenticação de usuários;
+- Agendamento de serviços;
+- Escolha de barbeiros, datas e horários;
+- Consulta e cancelamento de agendamentos;
+- Avaliação dos serviços;
+- Painel administrativo para gerenciar serviços, horários e agenda.
+
+## Como executar
+
+Clone o repositório e instale as dependências:
+
+```bash
+npm install
+```
+
+Configure o arquivo `.env` com as variáveis necessárias:
+
+```env
+VITE_API_URL=https://agendamentos.spaincentral.cloudapp.azure.com/api
+VITE_ORGANIZACAO=barbearia
+```
+
+Inicie o projeto:
+
+```bash
+npm run dev
+```
+
+Para gerar a versão de produção:
+
+```bash
+npm run build
+```
+
+## Documentação da API
+
+[Swagger — API de Agendamentos](https://agendamentos.spaincentral.cloudapp.azure.com/api/docs/)
+
+## Aplicação online
+
+[barbearia-pos-psi.vercel.app](https://barbearia-pos-psi.vercel.app/)
+
+
+Este projeto foi desenvolvido a partir do repositório de exemplo [**dvcirilo-ifrn/pos-escola-de-musica-web**](https://github.com/dvcirilo-ifrn/pos-escola-de-musica-web), adaptado para o domínio de agendamento de serviços de barbearia.
