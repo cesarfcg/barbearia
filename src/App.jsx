@@ -29,6 +29,7 @@ import { NaoEncontrado } from "./pages/NaoEncontrado";
 import { Perfil } from "./pages/Perfil";
 import { Barbeiro } from "./pages/Barbeiro";
 import { Barbeiros } from "./pages/Barbeiros";
+import { LandingPage } from "./pages/LandingPage";
 
 function RedirecionarHorario({ avaliar = false }) {
   const { id } = useParams();
@@ -41,7 +42,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<Publica />}>
-            <Route index element={<Entrada />} />
+            <Route index element={<LandingPage />} />
+            <Route path="/entrada" element={<Entrada />} />
             <Route path="/login" element={<Login />} />
             <Route path="/cadastro" element={<Cadastro />} />
             <Route path="/esqueci-senha" element={<EsqueciSenha />} />

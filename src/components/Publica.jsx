@@ -22,6 +22,14 @@ export function Publica() {
     )
   }
 
+  if (pathname === '/') {
+  return (
+    <Container maxWidth={false} disableGutters sx={{ minHeight: '100vh' }}>
+      <Outlet />
+    </Container>
+  )
+}
+
   return (
     <Container className="min-vh-100 d-flex align-items-center">
       <Grid container className="w-100" sx={{ justifyContent: "center" }}>
