@@ -41,28 +41,6 @@ export function LandingPage() {
             </Link>
           </div>
         </div>
-
-        <div className="landing__stats">
-          <div>
-            <strong>4.9 ★</strong>
-            <span>AVALIAÇÃO DOS CLIENTES</span>
-          </div>
-
-          <div>
-            <strong>+18</strong>
-            <span>ANOS DE TRADIÇÃO</span>
-          </div>
-
-          <div>
-            <strong>15</strong>
-            <span>PROFISSIONAIS</span>
-          </div>
-
-          <div>
-            <strong>VIP</strong>
-            <span>ATENDIMENTO ESPECIAL</span>
-          </div>
-        </div>
       </section>
     </main>
   );
